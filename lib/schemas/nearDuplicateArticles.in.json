@@ -1,0 +1,33 @@
+{
+    "type": "object",
+    "properties": {
+        "doi": {
+            "required": false,
+            "type": "string"
+        },
+        "title": {
+            "required": false,
+            "type": "string"
+        },
+        "year": {
+            "required": false,
+            "type": "string"
+        },
+        "description": {
+            "required": false,
+            "type": "string"
+        },
+        "fulltext": {
+            "required": false,
+            "type": "string"
+        },
+        "identifier": {
+            "required": false,
+            "type": "string"
+        },
+        "repositoryId": {
+            "required": false,
+            "type": "string"
+        }
+    }
+}

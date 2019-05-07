@@ -1,0 +1,11 @@
+{
+    "type": "object",
+    "properties": {
+        "requestBody": {
+            "items": {
+                "type": "string"
+            },
+            "type": "array"
+        }
+    }
+}

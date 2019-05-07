@@ -1,0 +1,16 @@
+{
+    "type": "object",
+    "properties": {
+        "stats": {
+            "required": false,
+            "type": "boolean",
+            "default": false
+        },
+        "requestBody": {
+            "items": {
+                "type": "integer"
+            },
+            "type": "array"
+        }
+    }
+}

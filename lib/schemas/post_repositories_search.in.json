@@ -1,0 +1,39 @@
+{
+    "type": "object",
+    "properties": {
+        "stats": {
+            "required": false,
+            "type": "boolean",
+            "default": false
+        },
+        "requestBody": {
+            "items": {
+                "properties": {
+                    "page": {
+                        "default": 1,
+                        "description": "Which page of the search results should be retrieved. Can be any number from 1 to 100, default is 1 (first page)",
+                        "maximum": 100,
+                        "minimum": 1,
+                        "type": "integer"
+                    },
+                    "pageSize": {
+                        "default": 10,
+                        "description": "The number of results to return per page. Can be any number from 10 to 100, default is 10",
+                        "maximum": 100,
+                        "minimum": 10,
+                        "type": "integer"
+                    },
+                    "query": {
+                        "description": "Search query",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "query"
+                ],
+                "type": "object"
+            },
+            "type": "array"
+        }
+    }
+}

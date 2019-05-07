@@ -1,0 +1,345 @@
+{
+    "title": "CORE API v2",
+    "description": "<p style=\"text-align: justify;\">You can use the CORE API to access the \n    resources harvested and enriched by CORE. If you encounter any problems with the API, please <a href=\"/contact\">report them to us</a>.</p>\n\n<h2>Overview</h2>\n<p style=\"text-align: justify;\">The API is organised by resource type. The resources are <b>articles</b>, \n    <b>journals</b> and <b>repositories</b> and are represented using JSON data format. Furthermore, \n    each resource has a list of methods. The API also provides two global methods for accessing all resources at once.</p>\n\n<h2>Response format</h2>\n<p style=\"text-align: justify;\">Response for each query contains two fields: <b>status</b> and <b>data</b>.\n    In case of an error status, the data field is empty. The data field contains a single object\n    in case the request is for a specific identifier (e.g. CORE ID, CORE repository ID, etc.), or  \n    contains a list of objects, for example for search queries. In case of batch requests, the response\n    is an array of objects, each of which contains its own <b>status</b> and <b>data</b> fields.\n    For search queries the response contains an additional field <b>totalHits</b>, which is the \n    total number of items which match the search criteria.</p>\n\n<h2>Search query syntax</h2>\n\n<p style=\"text-align: justify\">Complex search queries can be used in all of the API search methods.\n    The query can be a simple string or it can be built using terms and operators described in Elasticsearch\n    <a href=\"http://www.elastic.co/guide/en/elasticsearch/reference/1.4/query-dsl-query-string-query.html#query-string-syntax\">documentation</a>.\n    The usable field names are <strong>title</strong>, <strong>description</strong>, <strong>fullText</strong>, \n    <strong>authors</strong>, <strong>publisher</strong>, <strong>repositories.id</strong>, <strong>repositories.name</strong>, \n    <strong>doi</strong>, <strong>oai</strong>, <strong>identifiers</strong> (which is a list of article identifiers including OAI, URL, etc.), <strong>language.name</strong> \n    and <strong>year</strong>. Some example queries:\n</p>\n\n<ul style=\"margin-left: 30px;\">\n    <li><p>title:psychology and language.name:English</p></li>\n    <li><p>repositories.id:86 AND year:2014</p></li>\n    <li><p>identifiers:\"oai:aura.abdn.ac.uk:2164/3837\" OR identifiers:\"oai:aura.abdn.ac.uk:2164/3843\"</p></li>\n    <li><p>doi:\"10.1186/1471-2458-6-309\"</p></li>\n</ul>\n\n<h3>Retrieving the latest Articles</h3>\n<p style=\"text-align: justify\">\n    You can retrieve the harvested items since specific dates using the following queries:\n</p>\n\n<ul style=\"margin-left: 30px;\">\n    <li><p>repositoryDocument.metadataUpdated:>2017-02-10</p></li>\n    <li><p>repositoryDocument.metadataUpdated:>2017-03-01 AND repositoryDocument.metadataUpdated:<2017-03-31</p></li>    \n</ul>\n\n<h2>Sort order</h2>\n\n<p style=\"text-align: justify;\">For search queries, the results are ordered by relevance score. For batch \n    requests, the results are retrieved in the order of the requests.</p>\n\n<h2>Parameters</h2>\n<p style=\"text-align: justify;\">The API methods allow different parameters to be passed. Additionally, there is an API key parameter which is common to all API methods. For all API methods \n    the API key can be provided either as a query parameter or in the request header. If the API key \n    is not provided, the API will return HTTP 401 error. You can register for an API key <a href=\"/services#api\">here</a>.</p>\n\n<h2>API methods</h2>",
+    "docsUrl": "",
+    "url": "https://api.apis.guru/v2/specs/core.ac.uk/2.0/swagger.json",
+    "envVars": {},
+    "credentials": {
+        "fields": {
+            "server": {
+                "label": "Server",
+                "viewClass": "SelectView",
+                "model": [
+                    "http://core.ac.uk/api-v2",
+                    "--- Custom URL"
+                ],
+                "required": true
+            },
+            "otherServer": {
+                "label": "Custom Server URL",
+                "viewClass": "TextFieldView"
+            },
+            "apiKey": {
+                "label": "apiKey (apiKey)",
+                "viewClass": "TextFieldView",
+                "note": "Your Api Key. Also accepts apiKey as a header"
+            }
+        }
+    },
+    "triggers": {
+        "startFlow": {
+            "main": "./lib/triggers/startFlow.js",
+            "type": "polling",
+            "title": "Start Flow",
+            "fields": {}
+        }
+    },
+    "actions": {
+        "nearDuplicateArticles": {
+            "main": "./lib/actions/nearDuplicateArticles.js",
+            "title": "Get all near duplicate articles",
+            "description": "Method accepts values for several parameters and retrieves a JSON array of articles which have near duplicate content matching the input parameters' values. The response array contains ids of the near duplicate articles along with their relevance scores.",
+            "fields": {
+                "verbose": {
+                    "viewClass": "CheckBoxView",
+                    "label": "Debug this step (log more data)"
+                }
+            },
+            "metadata": {
+                "in": "./lib/schemas/nearDuplicateArticles.in.json",
+                "out": {
+                    "type": "object"
+                }
+            }
+        },
+        "getArticleByCoreIdBatch": {
+            "main": "./lib/actions/getArticleByCoreIdBatch.js",
+            "title": "Batch operation for retrieving articles by CORE ID",
+            "description": "Method accepts a JSON array of CORE IDs and retrieves a list of articles. The response array is ordered based on the order of the IDs in the request array.",
+            "fields": {
+                "verbose": {
+                    "viewClass": "CheckBoxView",
+                    "label": "Debug this step (log more data)"
+                }
+            },
+            "metadata": {
+                "in": "./lib/schemas/getArticleByCoreIdBatch.in.json",
+                "out": {
+                    "type": "object"
+                }
+            }
+        },
+        "getArticleByCoreId": {
+            "main": "./lib/actions/getArticleByCoreId.js",
+            "title": "Get article by CORE ID",
+            "description": "Method will retrieve an article based on given CORE ID.",
+            "fields": {
+                "verbose": {
+                    "viewClass": "CheckBoxView",
+                    "label": "Debug this step (log more data)"
+                }
+            },
+            "metadata": {
+                "in": "./lib/schemas/getArticleByCoreId.in.json",
+                "out": {
+                    "type": "object"
+                }
+            }
+        },
+        "getArticlePdfByCoreId": {
+            "main": "./lib/actions/getArticlePdfByCoreId.js",
+            "title": "Get fulltext PDF by CORE ID",
+            "description": "Method will retrieve an article based on given CORE ID.",
+            "fields": {
+                "verbose": {
+                    "viewClass": "CheckBoxView",
+                    "label": "Debug this step (log more data)"
+                }
+            },
+            "metadata": {
+                "in": "./lib/schemas/getArticlePdfByCoreId.in.json",
+                "out": {
+                    "type": "object"
+                }
+            }
+        },
+        "getArticleHistoryByCoreId": {
+            "main": "./lib/actions/getArticleHistoryByCoreId.js",
+            "title": "Get article history by CORE ID",
+            "description": "Method accepts a single CORE ID and returns a list of all historical versions of the article, which are stored in CORE database. The results are ordered from the newest one to the oldest one.",
+            "fields": {
+                "verbose": {
+                    "viewClass": "CheckBoxView",
+                    "label": "Debug this step (log more data)"
+                }
+            },
+            "metadata": {
+                "in": "./lib/schemas/getArticleHistoryByCoreId.in.json",
+                "out": {
+                    "type": "object"
+                }
+            }
+        },
+        "searchArticlesBatch": {
+            "main": "./lib/actions/searchArticlesBatch.js",
+            "title": "Batch operation for search through articles",
+            "description": "Method accepts a JSON array of search queries and parameters. It then searches through all articles and returns a JSON array of search results for each of the queries. Method searches through all article fields (title, authors, subjects, identifiers, etc.).",
+            "fields": {
+                "verbose": {
+                    "viewClass": "CheckBoxView",
+                    "label": "Debug this step (log more data)"
+                }
+            },
+            "metadata": {
+                "in": "./lib/schemas/searchArticlesBatch.in.json",
+                "out": {
+                    "type": "object"
+                }
+            }
+        },
+        "searchArticles": {
+            "main": "./lib/actions/searchArticles.js",
+            "title": "Search through all documents",
+            "description": "Searches through all articles and returns a JSON array with search results. Method searches through all article fields.",
+            "fields": {
+                "verbose": {
+                    "viewClass": "CheckBoxView",
+                    "label": "Debug this step (log more data)"
+                }
+            },
+            "metadata": {
+                "in": "./lib/schemas/searchArticles.in.json",
+                "out": {
+                    "type": "object"
+                }
+            }
+        },
+        "similarArticles": {
+            "main": "./lib/actions/similarArticles.js",
+            "title": "Get articles by similarity to a text",
+            "description": "Method accepts a text and retrieves a JSON array of articles which are similar to the given text. The response array is ordered based on similarity score, starting from the most similar.",
+            "fields": {
+                "verbose": {
+                    "viewClass": "CheckBoxView",
+                    "label": "Debug this step (log more data)"
+                }
+            },
+            "metadata": {
+                "in": "./lib/schemas/similarArticles.in.json",
+                "out": {
+                    "type": "object"
+                }
+            }
+        },
+        "getJournalByIssnBatch": {
+            "main": "./lib/actions/getJournalByIssnBatch.js",
+            "title": "Batch operation for retrieving journals by ISSN",
+            "description": "Method accepts a JSON array of ISSNs and retrieves a list of journals.",
+            "fields": {
+                "verbose": {
+                    "viewClass": "CheckBoxView",
+                    "label": "Debug this step (log more data)"
+                }
+            },
+            "metadata": {
+                "in": "./lib/schemas/getJournalByIssnBatch.in.json",
+                "out": {
+                    "type": "object"
+                }
+            }
+        },
+        "getJournalByIssn": {
+            "main": "./lib/actions/getJournalByIssn.js",
+            "title": "Find journal by ISSN",
+            "description": "Returns a journal with given ISSN identifier.",
+            "fields": {
+                "verbose": {
+                    "viewClass": "CheckBoxView",
+                    "label": "Debug this step (log more data)"
+                }
+            },
+            "metadata": {
+                "in": "./lib/schemas/getJournalByIssn.in.json",
+                "out": {
+                    "type": "object"
+                }
+            }
+        },
+        "post_journals_search": {
+            "main": "./lib/actions/post_journals_search.js",
+            "title": "Batch operation for search through journals",
+            "description": "Method accepts a JSON array of search queries and parameters. It then searches through all journals and returns a JSON array of search results for each of the queries. Method searches through all journal fields (title, identifiers, subjects, language, rights and publisher).",
+            "fields": {
+                "verbose": {
+                    "viewClass": "CheckBoxView",
+                    "label": "Debug this step (log more data)"
+                }
+            },
+            "metadata": {
+                "in": "./lib/schemas/post_journals_search.in.json",
+                "out": {
+                    "type": "object"
+                }
+            }
+        },
+        "get_journals_search__query_": {
+            "main": "./lib/actions/get_journals_search__query_.js",
+            "title": "Search through journals",
+            "description": "Searches through all journals and returns a JSON array of search results. Method searches through all journal fields (title, identifiers, subjects, language, rights and publisher).",
+            "fields": {
+                "verbose": {
+                    "viewClass": "CheckBoxView",
+                    "label": "Debug this step (log more data)"
+                }
+            },
+            "metadata": {
+                "in": "./lib/schemas/get_journals_search__query_.in.json",
+                "out": {
+                    "type": "object"
+                }
+            }
+        },
+        "getRepositoryByIdBatch": {
+            "main": "./lib/actions/getRepositoryByIdBatch.js",
+            "title": "Batch operation for retrieving repositories by CORE repository ID",
+            "description": "Method accepts a JSON array of CORE repository IDs and retrieves a list of repositories. The response array is ordered based on the order of the IDs in the request array. The maximum number of IDs in request is 100.",
+            "fields": {
+                "verbose": {
+                    "viewClass": "CheckBoxView",
+                    "label": "Debug this step (log more data)"
+                }
+            },
+            "metadata": {
+                "in": "./lib/schemas/getRepositoryByIdBatch.in.json",
+                "out": {
+                    "type": "object"
+                }
+            }
+        },
+        "getRepositoryById": {
+            "main": "./lib/actions/getRepositoryById.js",
+            "title": "Get repository by CORE repository ID",
+            "description": "Method will retrieve a repository based on given CORE repository ID.",
+            "fields": {
+                "verbose": {
+                    "viewClass": "CheckBoxView",
+                    "label": "Debug this step (log more data)"
+                }
+            },
+            "metadata": {
+                "in": "./lib/schemas/getRepositoryById.in.json",
+                "out": {
+                    "type": "object"
+                }
+            }
+        },
+        "post_repositories_search": {
+            "main": "./lib/actions/post_repositories_search.js",
+            "title": "Batch operation for searching through repositories",
+            "description": "Method accepts a JSON array of search queries and parameters. It then searches through all repositories and returns a JSON array of search results for each of the queries. Method searches through all repository fields.",
+            "fields": {
+                "verbose": {
+                    "viewClass": "CheckBoxView",
+                    "label": "Debug this step (log more data)"
+                }
+            },
+            "metadata": {
+                "in": "./lib/schemas/post_repositories_search.in.json",
+                "out": {
+                    "type": "object"
+                }
+            }
+        },
+        "get_repositories_search__query_": {
+            "main": "./lib/actions/get_repositories_search__query_.js",
+            "title": "Search through all repositories",
+            "description": "Searches through all repositories and returns a JSON array with search results. Method searches through all repository fields.",
+            "fields": {
+                "verbose": {
+                    "viewClass": "CheckBoxView",
+                    "label": "Debug this step (log more data)"
+                }
+            },
+            "metadata": {
+                "in": "./lib/schemas/get_repositories_search__query_.in.json",
+                "out": {
+                    "type": "object"
+                }
+            }
+        },
+        "post_search": {
+            "main": "./lib/actions/post_search.js",
+            "title": "Batch operation for search through all resources",
+            "description": "Method accepts a JSON array of search queries. It searches through all resources and returns a JSON array with search results for each of the queries. Method searches through all resources and all fields. The results are ordered by relevance score and contain type of the relevant resource and its ID. Furthermore, the responses are oredered based on the order of the request items. The metadata of each resource need to be obtained through an appropriate method.",
+            "fields": {
+                "verbose": {
+                    "viewClass": "CheckBoxView",
+                    "label": "Debug this step (log more data)"
+                }
+            },
+            "metadata": {
+                "in": "./lib/schemas/post_search.in.json",
+                "out": {
+                    "type": "object"
+                }
+            }
+        },
+        "get_search__query_": {
+            "main": "./lib/actions/get_search__query_.js",
+            "title": "Search through all resources",
+            "description": "Searches through all resources and returns a JSON array with search results. Method searches through all resources and all fields. The results are ordered by relevance score and contain type of the relevant resource and its ID. The metadata of each resource need to be obtained through an appropriate method.",
+            "fields": {
+                "verbose": {
+                    "viewClass": "CheckBoxView",
+                    "label": "Debug this step (log more data)"
+                }
+            },
+            "metadata": {
+                "in": "./lib/schemas/get_search__query_.in.json",
+                "out": {
+                    "type": "object"
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,14 @@
+{
+    "type": "object",
+    "properties": {
+        "repositoryId": {
+            "required": true,
+            "type": "integer"
+        },
+        "stats": {
+            "required": false,
+            "type": "boolean",
+            "default": false
+        }
+    }
+}

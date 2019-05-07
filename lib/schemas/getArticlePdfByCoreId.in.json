@@ -1,0 +1,9 @@
+{
+    "type": "object",
+    "properties": {
+        "coreId": {
+            "required": true,
+            "type": "string"
+        }
+    }
+}

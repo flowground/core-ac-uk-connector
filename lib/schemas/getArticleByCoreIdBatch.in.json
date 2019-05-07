@@ -1,0 +1,46 @@
+{
+    "type": "object",
+    "properties": {
+        "metadata": {
+            "required": false,
+            "type": "boolean",
+            "default": true
+        },
+        "fulltext": {
+            "required": false,
+            "type": "boolean",
+            "default": false
+        },
+        "citations": {
+            "required": false,
+            "type": "boolean",
+            "default": false
+        },
+        "similar": {
+            "required": false,
+            "type": "boolean",
+            "default": false
+        },
+        "duplicate": {
+            "required": false,
+            "type": "boolean",
+            "default": false
+        },
+        "urls": {
+            "required": false,
+            "type": "boolean",
+            "default": false
+        },
+        "faithfulMetadata": {
+            "required": false,
+            "type": "boolean",
+            "default": false
+        },
+        "requestBody": {
+            "items": {
+                "type": "integer"
+            },
+            "type": "array"
+        }
+    }
+}

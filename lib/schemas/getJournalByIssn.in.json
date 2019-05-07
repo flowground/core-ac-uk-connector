@@ -1,0 +1,9 @@
+{
+    "type": "object",
+    "properties": {
+        "issn": {
+            "required": true,
+            "type": "string"
+        }
+    }
+}
